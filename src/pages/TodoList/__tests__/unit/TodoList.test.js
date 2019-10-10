@@ -1,19 +1,100 @@
 import { shallowMount } from '@vue/test-utils'
 import TodoList from '@/pages/TodoList/TodoList'
-import Header from '@/pages/TodoList/components/Header'
-const testMsg = 'hello world'
+import UndoList from '@/pages/TodoList/components/UndoList'
 
 describe('TodoList.vue', () => {
-  it('TodoList 初始化时，undoList 应该为空', () => {
+  it('初始化时，undoList 应该为空', () => {
     const wrapper = shallowMount(TodoList)
     const undoList = wrapper.vm.$data.undoList
     expect(undoList).toEqual([])
   })
-  it('TodoList 监听 Header 的 add 事件的时候，会增加一段内容', () => {
+  it('addUndoItem 方法被调用时，会增加一段内容', () => {
     const wrapper = shallowMount(TodoList)
-    const header = wrapper.find(Header)
-    header.vm.$emit('add', testMsg)
-    const undoList = wrapper.vm.$data.undoList
-    expect(undoList).toEqual([testMsg])
+    wrapper.setData({
+      undoList: [
+        { status: 'div', value: 1 },
+        { status: 'div', value: 2 },
+        { status: 'div', value: 3 }
+      ]
+    })
+    wrapper.vm.addUndoItem(4)
+    expect(wrapper.vm.$data.undoList).toEqual([
+      { status: 'div', value: 1 },
+      { status: 'div', value: 2 },
+      { status: 'div', value: 3 },
+      { status: 'div', value: 4 }
+    ])
+  })
+  it('调用 UndoList，应该传递 list 参数', () => {
+    const wrapper = shallowMount(TodoList)
+    const undoList = wrapper.find(UndoList)
+    const list = undoList.props('list')
+    expect(list).toBeTruthy()
+  })
+  it('handleDeleteItem 方法被调用时， UndoList 列表内容减少', () => {
+    const wrapper = shallowMount(TodoList)
+    wrapper.setData({
+      undoList: [
+        { status: 'div', value: 1 },
+        { status: 'div', value: 2 },
+        { status: 'div', value: 3 }
+      ]
+    })
+    wrapper.vm.handleItemDelete(1)
+    expect(wrapper.vm.$data.undoList).toEqual([
+      { status: 'div', value: 1 },
+      { status: 'div', value: 3 }
+    ])
+  })
+  it('changeStatus 方法被调用时， UndoList 列表项变为可编辑状态', () => {
+    const wrapper = shallowMount(TodoList)
+    wrapper.setData({
+      undoList: [
+        { status: 'div', value: 1 },
+        { status: 'div', value: 2 },
+        { status: 'div', value: 3 }
+      ]
+    })
+    wrapper.vm.changeStatus(1)
+    expect(wrapper.vm.$data.undoList).toEqual([
+      { status: 'div', value: 1 },
+      { status: 'input', value: 2 },
+      { status: 'div', value: 3 }
+    ])
+  })
+  it('resetStatus 方法被调用时， UndoList 列表项变为 div', () => {
+    const wrapper = shallowMount(TodoList)
+    wrapper.setData({
+      undoList: [
+        { status: 'div', value: 1 },
+        { status: 'input', value: 2 },
+        { status: 'div', value: 3 }
+      ]
+    })
+    wrapper.vm.resetStatus(1)
+    expect(wrapper.vm.$data.undoList).toEqual([
+      { status: 'div', value: 1 },
+      { status: 'div', value: 2 },
+      { status: 'div', value: 3 }
+    ])
+  })
+  it('changeItemValue 方法被调用时， UndoList 列表项内容发生变化', () => {
+    const wrapper = shallowMount(TodoList)
+    wrapper.setData({
+      undoList: [
+        { status: 'div', value: 1 },
+        { status: 'input', value: 2 },
+        { status: 'div', value: 3 }
+      ]
+    })
+    wrapper.vm.changeItemValue({
+      value: '444',
+      index: 1
+    })
+    expect(wrapper.vm.$data.undoList).toEqual([
+      { status: 'div', value: 1 },
+      { status: 'input', value: '444' },
+      { status: 'div', value: 3 }
+    ])
   })
 })
