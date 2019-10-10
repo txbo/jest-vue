@@ -10,7 +10,7 @@
     <ul class="list">
       <li
         class="item"
-        data-test="item"
+        data-test="list-item"
         @click="changeStatus(index)"
         v-for="(item, index) in list"
         :key="index">
