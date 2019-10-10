@@ -5,7 +5,7 @@ import UndoList from '@/pages/TodoList/components/UndoList'
 describe('TodoList.vue', () => {
   it('初始化时，undoList 应该为空', () => {
     const wrapper = shallowMount(TodoList)
-    const undoList = wrapper.vm.$data.undoList
+    const undoList = wrapper.vm.undoList
     expect(undoList).toEqual([])
   })
   it('addUndoItem 方法被调用时，会增加一段内容', () => {
@@ -18,7 +18,7 @@ describe('TodoList.vue', () => {
       ]
     })
     wrapper.vm.addUndoItem(4)
-    expect(wrapper.vm.$data.undoList).toEqual([
+    expect(wrapper.vm.undoList).toEqual([
       { status: 'div', value: 1 },
       { status: 'div', value: 2 },
       { status: 'div', value: 3 },
@@ -41,7 +41,7 @@ describe('TodoList.vue', () => {
       ]
     })
     wrapper.vm.handleItemDelete(1)
-    expect(wrapper.vm.$data.undoList).toEqual([
+    expect(wrapper.vm.undoList).toEqual([
       { status: 'div', value: 1 },
       { status: 'div', value: 3 }
     ])
@@ -56,7 +56,7 @@ describe('TodoList.vue', () => {
       ]
     })
     wrapper.vm.changeStatus(1)
-    expect(wrapper.vm.$data.undoList).toEqual([
+    expect(wrapper.vm.undoList).toEqual([
       { status: 'div', value: 1 },
       { status: 'input', value: 2 },
       { status: 'div', value: 3 }
@@ -72,7 +72,7 @@ describe('TodoList.vue', () => {
       ]
     })
     wrapper.vm.resetStatus(1)
-    expect(wrapper.vm.$data.undoList).toEqual([
+    expect(wrapper.vm.undoList).toEqual([
       { status: 'div', value: 1 },
       { status: 'div', value: 2 },
       { status: 'div', value: 3 }
@@ -91,7 +91,7 @@ describe('TodoList.vue', () => {
       value: '444',
       index: 1
     })
-    expect(wrapper.vm.$data.undoList).toEqual([
+    expect(wrapper.vm.undoList).toEqual([
       { status: 'div', value: 1 },
       { status: 'input', value: '444' },
       { status: 'div', value: 3 }

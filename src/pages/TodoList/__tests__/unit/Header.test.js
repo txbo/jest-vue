@@ -38,6 +38,6 @@ describe('Header.vue', () => {
     input.setValue('hello world')
     input.trigger('keyup.enter')
     expect(wrapper.emitted().add).toBeTruthy()
-    expect(wrapper.vm.$data.inputValue).toBe('')
+    expect(wrapper.vm.inputValue).toBe('')
   })
 })
